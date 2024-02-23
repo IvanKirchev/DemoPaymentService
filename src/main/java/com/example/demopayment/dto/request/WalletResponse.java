@@ -1,6 +1,7 @@
 package com.example.demopayment.dto.request;
 
 import com.example.demopayment.dto.response.CurrencyResponse;
+import com.example.demopayment.dto.response.UserResponse;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,6 +13,6 @@ public class WalletResponse {
 
     private UUID id;
     private int balance;
-    private RegisterUserRequest user;
+    private UserResponse user;
     private CurrencyResponse currency;
 }

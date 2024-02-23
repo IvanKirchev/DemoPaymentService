@@ -1,8 +1,12 @@
 package com.example.demopayment.service.impl;
 
+import com.example.demopayment.dto.request.DepositRequest;
 import com.example.demopayment.dto.request.RegisterUserRequest;
 import com.example.demopayment.dto.request.WalletResponse;
 import com.example.demopayment.dto.response.CurrencyResponse;
+import com.example.demopayment.dto.response.DepositResponse;
+import com.example.demopayment.dto.response.UserResponse;
+import com.example.demopayment.exceptions.OperationNotSupported;
 import com.example.demopayment.model.Currency;
 import com.example.demopayment.model.User;
 import com.example.demopayment.model.Wallet;
@@ -52,7 +56,7 @@ public class WalletServiceImpl implements WalletService {
         List<WalletResponse> wallets = new ArrayList<>();
 
         for (Wallet userWallet : userWallets) {
-            RegisterUserRequest userDto = RegisterUserRequest.builder()
+            UserResponse userResponse = UserResponse.builder()
                     .id(userWallet.getUser().getId())
                     .age(userWallet.getUser().getAge())
                     .name(userWallet.getUser().getFullName()).build();
@@ -64,7 +68,7 @@ public class WalletServiceImpl implements WalletService {
 
             wallets.add(WalletResponse.builder()
                     .id(userWallet.getId())
-                    .user(userDto)
+                    .user(userResponse)
                     .currency(currencyDto)
                     .balance(userWallet.getBalance())
                     .build());
@@ -75,11 +79,21 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public WalletResponse getWallet(UUID walletId) {
-        return null;
+        Wallet wallet = walletRepository.getReferenceById(walletId);
+
+        return WalletResponse.builder()
+                .id(wallet.getId())
+                .balance(wallet.getBalance())
+                .user(UserResponse.builder().id(wallet.getUser().getId()).build())
+                .currency(CurrencyResponse.builder()
+                        .id(wallet.getCurrency().getId())
+                        .symbol(wallet.getCurrency().getSymbol())
+                        .build())
+                .build();
     }
 
     @Override
-    public void removeWallet(UUID walletId) {
-
+    public void removeWallet(UUID walletId) throws OperationNotSupported {
+        throw new OperationNotSupported("Wallet removal is not supported");
     }
 }

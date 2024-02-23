@@ -1,14 +1,19 @@
 package com.example.demopayment.service.impl;
 
+import com.example.demopayment.dto.request.DepositRequest;
 import com.example.demopayment.dto.request.TransactionRequest;
+import com.example.demopayment.dto.response.DepositResponse;
 import com.example.demopayment.dto.response.TransactionResponse;
 import com.example.demopayment.exceptions.CurrencyNotSupportedException;
 import com.example.demopayment.exceptions.NotEnoughBalanceException;
 import com.example.demopayment.exceptions.WalletNotFoundException;
+import com.example.demopayment.model.Currency;
 import com.example.demopayment.model.Transaction;
+import com.example.demopayment.model.User;
 import com.example.demopayment.model.Wallet;
 import com.example.demopayment.repository.CurrencyRepository;
 import com.example.demopayment.repository.TransactionsRepository;
+import com.example.demopayment.repository.UserRepository;
 import com.example.demopayment.repository.WalletRepository;
 import com.example.demopayment.service.TransactionService;
 import com.example.demopayment.service.WalletService;
@@ -29,6 +34,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final WalletService walletService;
     private final TransactionsRepository transactionsRepository;
     private final CurrencyRepository currencyRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ)
@@ -94,5 +100,23 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction persistedTransaction = transactionsRepository.save(transaction);
 
         return new TransactionResponse(persistedTransaction.getId());
+    }
+
+    @Override
+    public TransactionResponse deposit(DepositRequest depositRequest, UUID userId) {
+        Currency currency = currencyRepository.getReferenceById(depositRequest.getCurrencyId());
+        User user = userRepository.getReferenceById(userId);
+        Wallet userWallet = walletRepository.getWalletByUserAndCurrency(userId, depositRequest.getCurrencyId());
+
+        walletRepository.addToBalance(userWallet.getId(), depositRequest.getAmount());
+
+        Transaction transaction = new Transaction();
+        transaction.setAmount(depositRequest.getAmount());
+        transaction.setReceiver(user);
+        transaction.setCurrency(currency);
+
+        UUID transactionId = transactionsRepository.save(transaction).getId();
+
+        return new TransactionResponse(transactionId);
     }
 }

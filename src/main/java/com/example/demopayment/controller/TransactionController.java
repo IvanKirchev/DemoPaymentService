@@ -23,7 +23,7 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping
-    public ResponseEntity<TransactionResponse> makeTransaction(@Valid @RequestBody TransactionRequest request)
+    public ResponseEntity<TransactionResponse> transfer(@Valid @RequestBody TransactionRequest request)
             throws NotEnoughBalanceException, WalletNotFoundException, CurrencyNotSupportedException {
 
         TransactionResponse transactionResponse = transactionService.transfer(request);
