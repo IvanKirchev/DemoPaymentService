@@ -2,9 +2,7 @@ package com.example.demopayment.controller;
 
 import com.example.demopayment.dto.request.DepositRequest;
 import com.example.demopayment.dto.request.RegisterUserRequest;
-import com.example.demopayment.dto.request.TransactionRequest;
-import com.example.demopayment.dto.request.WalletResponse;
-import com.example.demopayment.dto.response.DepositResponse;
+import com.example.demopayment.dto.response.WalletResponse;
 import com.example.demopayment.dto.response.TransactionResponse;
 import com.example.demopayment.dto.response.UserResponse;
 import com.example.demopayment.service.TransactionService;

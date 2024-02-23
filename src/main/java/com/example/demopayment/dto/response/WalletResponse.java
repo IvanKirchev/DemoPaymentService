@@ -1,4 +1,4 @@
-package com.example.demopayment.dto.request;
+package com.example.demopayment.dto.response;
 
 import com.example.demopayment.dto.response.CurrencyResponse;
 import com.example.demopayment.dto.response.UserResponse;

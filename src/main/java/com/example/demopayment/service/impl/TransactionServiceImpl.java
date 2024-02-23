@@ -2,7 +2,6 @@ package com.example.demopayment.service.impl;
 
 import com.example.demopayment.dto.request.DepositRequest;
 import com.example.demopayment.dto.request.TransactionRequest;
-import com.example.demopayment.dto.response.DepositResponse;
 import com.example.demopayment.dto.response.TransactionResponse;
 import com.example.demopayment.exceptions.CurrencyNotSupportedException;
 import com.example.demopayment.exceptions.NotEnoughBalanceException;
@@ -11,6 +10,7 @@ import com.example.demopayment.model.Currency;
 import com.example.demopayment.model.Transaction;
 import com.example.demopayment.model.User;
 import com.example.demopayment.model.Wallet;
+import com.example.demopayment.projection.TransactionPartiesOnly;
 import com.example.demopayment.repository.CurrencyRepository;
 import com.example.demopayment.repository.TransactionsRepository;
 import com.example.demopayment.repository.UserRepository;
@@ -118,5 +118,10 @@ public class TransactionServiceImpl implements TransactionService {
         UUID transactionId = transactionsRepository.save(transaction).getId();
 
         return new TransactionResponse(transactionId);
+    }
+
+    @Override
+    public TransactionPartiesOnly getTransactionParties(UUID transactionId) {
+        return  transactionsRepository.findTransactionById(transactionId);
     }
 }

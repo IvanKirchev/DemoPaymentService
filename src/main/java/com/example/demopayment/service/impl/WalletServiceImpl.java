@@ -1,10 +1,7 @@
 package com.example.demopayment.service.impl;
 
-import com.example.demopayment.dto.request.DepositRequest;
-import com.example.demopayment.dto.request.RegisterUserRequest;
-import com.example.demopayment.dto.request.WalletResponse;
+import com.example.demopayment.dto.response.WalletResponse;
 import com.example.demopayment.dto.response.CurrencyResponse;
-import com.example.demopayment.dto.response.DepositResponse;
 import com.example.demopayment.dto.response.UserResponse;
 import com.example.demopayment.exceptions.OperationNotSupported;
 import com.example.demopayment.model.Currency;
@@ -21,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -95,5 +93,11 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public void removeWallet(UUID walletId) throws OperationNotSupported {
         throw new OperationNotSupported("Wallet removal is not supported");
+    }
+
+    @Override
+    public List<WalletResponse> getWalletsWithBalanceAbove(Integer minBalance) {
+
+        return walletRepository.getWalletsWithBalanceAbove(minBalance).collect(Collectors.toList());
     }
 }
