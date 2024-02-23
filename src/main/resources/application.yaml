@@ -2,12 +2,12 @@ server:
   port: 8000
 spring:
   kafka:
-    bootstrap-servers: pkc-lzoyy.europe-west6.gcp.confluent.cloud:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER_ADDRESS}
     properties:
       sasl:
         mechanism: PLAIN
         jaas:
-          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='2O6ULB4ZBXB4WKCL' password='s4ijun9AJqKX7AVnbfTrAZuOC+G2RjLzSAjZ4mM0pD9t1SXgCcWCgIiq2lEj68mk';
+          config: ${JAAS_CONFIG}
       security:
         protocol: SASL_SSL
     consumer:
@@ -17,8 +17,8 @@ spring:
 #      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   datasource:
     driver-class-name: org.postgresql.Driver
-    password: 1234
-    url: jdbc:postgresql://localhost:5432/test1
+    password: ${POSTGRES_PASSWORD}
+    url: ${POSTGRES_URL}/test1
     username: postgres
   jpa:
     show-sql: true
